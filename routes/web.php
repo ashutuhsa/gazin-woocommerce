@@ -24,6 +24,6 @@ Route::get('integration', function () {
 Route::prefix('/')->group(function () {
     Route::prefix('/integration')->group(function () {
         Route::get('save-categories', 'ProductController@save_categories')->name('integration_products');
-        Route::get('save-products', 'WooCommerceController@save_category')->name('save_products');
+        Route::get('save-products', 'ProductController@save_products')->name('save_products');
     });
 });

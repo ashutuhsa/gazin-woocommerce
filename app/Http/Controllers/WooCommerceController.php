@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Automattic\WooCommerce\Client;
+use Illuminate\Support\Facades\Log;
 
 class WooCommerceController extends Controller
 {
@@ -41,9 +42,73 @@ class WooCommerceController extends Controller
             return $this->woocommerce->post('products/categories', $data);
 
         } catch (HttpClientException $e) {
+            Log::error("-----------------");
+            Log::error("Adding category");
+            Log::error($e->getMessage());
+            Log::error($e->getRequest());
+            Log::error($e->getResponse());
+            Log::error("-----------------");
             echo '<pre><code>' . print_r( $e->getMessage(), true ) . '</code><pre>'; // Error message.
             echo '<pre><code>' . print_r( $e->getRequest(), true ) . '</code><pre>'; // Last request data.
             echo '<pre><code>' . print_r( $e->getResponse(), true ) . '</code><pre>'; // Last response data.
+        }
+    }
+
+    public function save_product($data)
+    {
+        $this->startAPI();
+        try {
+            Log::info("###################################");
+            Log::info("Product added:");
+            Log::info($data);
+            Log::info("###################################");
+           return $this->woocommerce->post('products', $data);
+
+        } catch (HttpClientException $e) {
+            Log::error("-----------------");
+            Log::error("Adding product");
+            Log::error($e->getMessage());
+            Log::error($e->getRequest());
+            Log::error($e->getResponse());
+            Log::error("-----------------");
+            echo '<pre><code>' . print_r( $e->getMessage(), true ) . '</code><pre>'; // Error message.
+            echo '<pre><code>' . print_r( $e->getRequest(), true ) . '</code><pre>'; // Last request data.
+            echo '<pre><code>' . print_r( $e->getResponse(), true ) . '</code><pre>'; // Last response data.
+        }
+    }
+
+    public function save_productVariant($productId, $data)
+    {
+        $this->startAPI();
+        try {
+            Log::info("###################################");
+            Log::info("Product variant added:");
+            Log::info($data);
+            Log::info("###################################");
+            return $this->woocommerce->post("products/{$productId}/variations", $data);
+
+        } catch (HttpClientException $e) {
+            Log::error("-----------------");
+            Log::error("Adding product variant");
+            Log::error($e->getMessage());
+            Log::error($e->getRequest());
+            Log::error($e->getResponse());
+            Log::error("-----------------");
+            echo '<pre><code>' . print_r( $e->getMessage(), true ) . '</code><pre>'; // Error message.
+            echo '<pre><code>' . print_r( $e->getRequest(), true ) . '</code><pre>'; // Last request data.
+            echo '<pre><code>' . print_r( $e->getResponse(), true ) . '</code><pre>'; // Last response data.
+        }
+    }
+
+    public function get($route)
+    {
+        $this->startAPI();
+
+        try {
+            return $this->woocommerce->get($route);
+
+        } catch (HttpClientException $e) {
+            Log::error("To get route: {$e->getMessage()}");
         }
     }
 
